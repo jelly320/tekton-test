@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: build-oreo-client-image-from-git
+  name: build-and-push 
 spec:
   params:
     - name: image-url

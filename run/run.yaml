@@ -25,11 +25,17 @@ spec:
   # workspace用于Task间的数据传递,pv方式
   # 也可以采用pipeResource git类型等方式实现. 未使用的原因可参考"https://tekton.dev/docs/pipelines/resources/#why-aren-t-pipelineresources-in-beta"
   workspaces:
+    #- name: shared-data
+    #  persistentVolumeClaim:
+    #     claimName: shared-data
+    #  subPath: shared-data
     - name: shared-data
       volumeClaimTemplate:
+        metadata:
+           name : shared-data
         spec:
           accessModes:
-          - ReadWriteOnce
+            - ReadWriteOnce
           resources:
             requests:
               storage: 1Gi
