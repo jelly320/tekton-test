@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-oreo-client-image-from-git
+spec:
+  params:
+    - name: image-url
+      description: Url of image repository
+    - name: image-tag
+      description: Tag to apply to the built image
+    - name: image-appname
+      description: Image appname to apply to the built image
+  workspaces:
+    - name: shared-data
+
+  steps:
+    - name: build-and-push-harbor
+      # 使用kaniko代替docker
+      image: gcr.io/kaniko-project/executor:latest
+      command:
+        - /kaniko/executor
+      # 传递参数信息
+      args:
+        - --dockerfile=Dockerfile
+        - --destination=$(params.image-url)/$(params.image-appname):$(params.image-tag)
+        - --context=$(workspaces.shared-data.path)
+        - --skip-tls-verify
+      # 指定docker registy的认证信息
+      # https://github.com/GoogleContainerTools/kaniko/issues/837
+      # kubectl create secret generic regcred --from-file=.dockerconfigjson=/data/kaniko/.docker/config.json
+      volumeMounts:
+        - mountPath: /kaniko/.docker/
+          name: kaniko-secret
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: regcred
+        items:
+          - key: .dockerconfigjson
+            path: config.json

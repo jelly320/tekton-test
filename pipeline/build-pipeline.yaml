@@ -1,0 +1,80 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: fetch-build-deploy
+spec:
+  description: |
+    fetch-build-deploy
+    Pipeline  the following:
+      - Using the git-clone catalog Task to clone a branch
+        Passing a cloned repo to subsequent Tasks using a Workspace.
+      
+      - Ordering Tasks in a Pipeline using "runAfter" so that
+        git-clone completes before we try to read from the Workspace.
+      
+      - Using a volumeClaimTemplate Volume as a Workspace.
+      
+      - Avoiding hard-coded paths by using a Workspace's path
+        variable instead.
+  
+  params:
+    - name: git-url
+      type: string
+      description: The git repository URL to clone from.
+    - name: git-revision
+      type: string
+      description: The git branch to clone.
+    - name: image-url
+      description: Url of image repository
+    - name: image-tag
+      description: Tag to apply to the built image
+    - name: image-appname
+      description: Image appname to apply to the built image
+    - name: pathToYamlFile
+      description: The path to the yaml file to deploy within the git source
+  workspaces:
+    - name: shared-data
+      description: |
+        This workspace will receive the cloned git repo and be passed
+        to the next Task for the repo's file to be read.
+  
+  tasks:
+    # taskA: 使用https://hub.tekton.dev/tekton/task/git-clone 完成git-clone到worksapce下
+    #        可提前安装：tkn hub install task git-clone 或者 把git-clone的yaml
+    - name: fetch-from-git
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: "$(params.git-url)"
+        - name: revision
+          value: "$(params.git-revision)"
+      workspaces:
+        - name: output
+          workspace: shared-data
+    # taskB: build and then push harbor
+    - name: build-and-push
+      taskRef:
+        name: build-and-push
+      params:
+        - name: image-url
+          value: $(params.image-url)
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: image-appname
+          value: $(params.image-appname)
+      workspace:
+        - name: source
+          workspace: shared-data
+      runAfter:
+        - fetch-from-git
+    # taskC: deploy k8s
+    - name: deploy-to-k8s
+      taskRef:
+        name: deploy-to-k8s
+      workspace:
+        - name: source
+          workspace: shared-data
+      runAfter:
+        - build-and-push
+    

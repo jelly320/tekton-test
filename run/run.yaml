@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: fetch-build-deploy-run
+spec:
+  # 需要执行的pipeline
+  pipelineRef:
+    name: fetch-build-deploy
+  
+  # 传入pipeline需要的参数
+  params:
+    - name: git-url
+      value: http://gitlab4dev.5ypy.com/luyujiang/oreo-console-client.git
+    - name: git-revision
+      value: main
+    - name: image-url
+      value: harbor.996a.com:8443/mytest/
+    - name: image-tag
+      value: latest
+    - name: image-appname
+      value: oreo-client-test
+    - name: pathToYamlFile
+      value: deployment.yaml
+
+  # workspace用于Task间的数据传递,pv方式
+  # 也可以采用pipeResource git类型等方式实现. 未使用的原因可参考"https://tekton.dev/docs/pipelines/resources/#why-aren-t-pipelineresources-in-beta"
+  workspaces:
+    - name: shared-data
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+    - name: docker-config
+      secret:
+        secretName: docker-config
+  # sa
+  serviceAccountName: tekton-build
