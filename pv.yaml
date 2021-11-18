@@ -1,8 +1,26 @@
-  - name: shared-data
-    volumeClaimTemplate:
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+name: shared-data 
+spec: 
+resources: 
+  requests: 
+    storage: 1Gi 
+volumeMode: Filesystem 
+storageClassName: nfs-storage  # 使用 StorageClass 自动生成 PV 
+accessModes: 
+  - ReadWriteOnce
+
+# apiVersion: v1
+# kind: PersistenVolume
+# metadata:
+#   name: data-pv
+# spec:
+#   accessModes:
+#   - ReadWriteOnce
+#   capacity:
+#     storage: 2Gi
+#   hostPath:
+#     path: /data/code/
+#     type: ""
+#   storageClassName: manual
