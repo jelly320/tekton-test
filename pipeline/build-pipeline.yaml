@@ -3,20 +3,6 @@ kind: Pipeline
 metadata:
   name: fetch-build-deploy
 spec:
-  description: |
-    fetch-build-deploy
-    Pipeline  the following:
-      - Using the git-clone catalog Task to clone a branch
-        Passing a cloned repo to subsequent Tasks using a Workspace.
-      
-      - Ordering Tasks in a Pipeline using "runAfter" so that
-        git-clone completes before we try to read from the Workspace.
-      
-      - Using a volumeClaimTemplate Volume as a Workspace.
-      
-      - Avoiding hard-coded paths by using a Workspace's path
-        variable instead.
-  
   params:
     - name: git-url
       type: string
@@ -34,10 +20,7 @@ spec:
       description: The path to the yaml file to deploy within the git source
   workspaces:
     - name: shared-data
-      description: |
-        This workspace will receive the cloned git repo and be passed
-        to the next Task for the repo's file to be read.
-  
+
   tasks:
     # taskA: 使用https://hub.tekton.dev/tekton/task/git-clone 完成git-clone到worksapce下
     #        可提前安装：tkn hub install task git-clone 或者 把git-clone的yaml

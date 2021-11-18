@@ -11,16 +11,16 @@
 #    accessModes: 
 #      - ReadWriteOnce
 
-apiVersion: v1
-kind: PersistenVolume
-metadata:
-  name: shared-data
-spec:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 2Gi
-  hostPath:
-    path: /data/code/
-    type: ""
-  storageClassName: manual
+# apiVersion: v1
+# kind: PersistenVolume
+# metadata:
+#   name: shared-data
+# spec:
+#   accessModes:
+#   - ReadWriteOnce
+#   capacity:
+#     storage: 2Gi
+#   hostPath:
+#     path: /data/code/
+#     type: ""
+#   storageClassName: manual
