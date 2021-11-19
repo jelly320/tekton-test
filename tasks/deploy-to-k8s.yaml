@@ -22,8 +22,8 @@ spec:
       args:
         - "-i"
         - "-e"
-        - "s;imagetag;$(params.imagetag);g"
-        - "source/$(params.pathToYamlFile)"  
+        - "s;imagetag;$(params.image-tag);g"
+        - "source/$(inputs.params.pathToYamlFile)"  
     
     - name: run-kubectl
       image: lachlanevenson/k8s-kubectl:latest
