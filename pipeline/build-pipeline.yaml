@@ -4,12 +4,6 @@ metadata:
   name: fetch-build-deploy
 spec:
   params:
-    - name: git-url
-      type: string
-      description: The git repository URL to clone from.
-    - name: git-revision
-      type: string
-      description: The git branch to clone.
     - name: image-url
       description: Url of image repository
     - name: image-tag
