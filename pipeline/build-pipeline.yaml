@@ -18,23 +18,27 @@ spec:
       description: Image appname to apply to the built image
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source
-  workspaces:
-    - name: shared-data
+  
+  resources:
+    - name: git-repo
+      type: git
+
 
   tasks:
     # taskA: 使用https://hub.tekton.dev/tekton/task/git-clone 完成git-clone到worksapce下
     #        可提前安装：tkn hub install task git-clone 或者 把git-clone的yaml
-    - name: fetch-from-git
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: "$(params.git-url)"
-        - name: revision
-          value: "$(params.git-revision)"
-      workspaces:
-        - name: output
-          workspace: shared-data
+    # - name: fetch-from-git
+    #   taskRef:
+    #     name: git-clone
+    #   params:
+    #     - name: url
+    #       value: "$(params.git-url)"
+    #     - name: revision
+    #       value: "$(params.git-revision)"
+    #   workspaces:
+    #     - name: output
+    #       workspace: shared-data
+
     # taskB: build and then push harbor
     - name: build-and-push
       taskRef:
@@ -46,18 +50,24 @@ spec:
           value: $(params.image-tag)
         - name: image-appname
           value: $(params.image-appname)
-      workspaces:
-        - name: source
-          workspace: shared-data
-      runAfter:
-        - fetch-from-git
+      resources:
+        inputs:
+          - name: source
+            resource: git-repo
+
     # taskC: deploy k8s
     - name: deploy-to-k8s
       taskRef:
         name: deploy-to-k8s
-      workspaces:
-        - name: source
-          workspace: shared-data
+      params:
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: pathToYamlFile
+          value: $(params.pathToYamlFile)
+      resources:
+        inputs:
+          - name: source
+            resource: git-repo
       runAfter:
         - build-and-push
     
