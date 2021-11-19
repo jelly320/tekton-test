@@ -3,10 +3,10 @@ kind: Task
 metadata:
   name: deploy-to-k8s
 spec:
-  inputs:
-    resources:
-      - name: source
-        type: git
+  resources:
+    inputs:
+        - name: source
+          type: git
   params:
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source

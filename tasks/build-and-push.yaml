@@ -3,10 +3,10 @@ kind: Task
 metadata:
   name: build-and-push 
 spec:
-  inputs:
-    resources:
-      - name: source
-        type: git
+  resources:
+    inputs:
+        - name: source
+          type: git
   params:
     - name: image-url
       description: Url of image repository
