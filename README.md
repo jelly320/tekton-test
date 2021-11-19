@@ -12,7 +12,7 @@
 
 mark
 ```
-kubectl create secret generic regcred --from-file=.dockerconfigjson=/data/kaniko/.docker/config.json
+
 ```
 
 
@@ -54,3 +54,18 @@ params
 tekton和deploy不在一个集群？
 
 
+
+```
+echo user:passwd |base64
+cat /data/kaniko/.docker/config.json
+  {
+      {
+          "auths": {
+                  "harbor.****.com:8*3": {
+                          "auth": "bHV5dWppYW5**************************0A0NTY0Cg=="
+                  }       
+          }       
+      }
+  }
+kubectl create secret generic regcred --from-file=.dockerconfigjson=/data/kaniko/.docker/config.json
+```
