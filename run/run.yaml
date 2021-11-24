@@ -7,17 +7,6 @@ spec:
   pipelineRef:
     name: fetch-build-deploy
   
-  # 使用resourceSpec直接在pipelinerun创建piplineResource
-  resources:
-    - name: git-repo
-      resourceSpec:
-        type: git
-        params:
-          - name: revision
-            value: main
-          - name: url
-            value:  http://gitlab4dev.5ypy.com/luyujiang/oreo-console-client.git
-
   # 传入pipeline需要的参数
   params:
     - name: image-url
@@ -29,7 +18,7 @@ spec:
     - name: pathToYamlFile
       value: deployment.yaml
 
-  # workspaces用于Task间的数据传递
+  # workspaces用于Task间的数据传递（即pods间多个container共享数据问题）
   # 官方推荐pv/pvc方式,而不推荐pipeResource方式（原因是"https://tekton.dev/docs/pipelines/resources/#why-aren-t-pipelineresources-in-beta"）
   # 其他参考资料：
   #   https://github.com/tektoncd/pipeline/pull/2326
@@ -40,19 +29,16 @@ spec:
   #       claimName: mypvc
   #     subPath: my-subdir
 
-  # workspaces:
-  #   - name: shared-data
-  #     volumeClaimTemplate:
-  #       spec:
-  #         accessModes:
-  #         - ReadWriteOnce
-  #         resources:
-  #           requests:
-  #             storage: 1Gi
-
   workspaces:
-    - name: docker-config
-      secret:
-        secretName: docker-config
+    - name: shared-data
+      # volumeClaimTemplate相当于kind:PersistentVolumeClaim. 是一份pvc的申请.
+      volumeClaimTemplate:
+        metadata:
+          name: tekton-pvc
+        spec:
+          accessModes: ["ReadWriteMany"]
+          resources:
+            requests:
+              storage: 1Gi
   # sa
   serviceAccountName: tekton-build

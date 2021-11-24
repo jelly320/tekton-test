@@ -1,10 +1,25 @@
+每个task应当都是可以被复用的
+
+tekton-test描述：
 ```
+- resource
+    |- serviceaccount.yaml
+    |- 
 - tasks
     |-
     |-
 - pipeline
+    |- build-pipeline.yaml  //pipeline
 - run
+    |- run.yaml   //pipelinerun
 - trigger
+    |- 
+
+创建顺序：
+第一类
+
+第二类
+第三类
 ```
 
 
@@ -20,7 +35,8 @@ tekton安装
 ```
 # kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 
-# wget https://github.com/tektoncd/dashboard/releases/latest/download/tekton-dashboard-release.yaml  修改NodePort
+# wget https://github.com/tektoncd/dashboard/releases/latest/download/tekton-dashboard-release.yaml  
+参考tekton-dashboard-release.yaml中Service部分的修改，按需即可。
 
 # rpm -Uvh https://github.com/tektoncd/cli/releases/download/v0.21.0/tektoncd-cli-0.21.0_Linux-64bit.rpm
 ```
