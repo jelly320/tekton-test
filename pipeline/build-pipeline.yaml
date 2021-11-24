@@ -4,6 +4,11 @@ metadata:
   name: fetch-build-deploy
 spec:
   params:
+    - name: git-url
+      description: url of git repo
+    - name: git-revision
+      description: git revision
+      default: 
     - name: image-url
       description: Url of image repository
     - name: image-tag
@@ -12,26 +17,25 @@ spec:
       description: Image appname to apply to the built image
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source
-  
-  resources:
-    - name: git-repo
-      type: git
-
+  # 用到的工作区，在pipelinerun中需要有定义
+  workspaces:
+    - name: shared-data
+    - name: docker-config
 
   tasks:
     # taskA: 使用https://hub.tekton.dev/tekton/task/git-clone 完成git-clone到worksapce下
     #        可提前安装：tkn hub install task git-clone 或者 把git-clone的yaml
-    # - name: fetch-from-git
-    #   taskRef:
-    #     name: git-clone
-    #   params:
-    #     - name: url
-    #       value: "$(params.git-url)"
-    #     - name: revision
-    #       value: "$(params.git-revision)"
-    #   workspaces:
-    #     - name: output
-    #       workspace: shared-data
+    - name: fetch-from-git
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: "$(params.git-url)"
+        - name: revision
+          value: "$(params.git-revision)"
+      workspaces:
+        - name: output
+          workspace: shared-data
 
     # taskB: build and then push harbor
     - name: build-and-push
@@ -44,11 +48,11 @@ spec:
           value: $(params.image-tag)
         - name: image-appname
           value: $(params.image-appname)
-      resources:
-        inputs:
-          - name: source
-            resource: git-repo
-
+      workspaces:
+        - name: source
+          workspace: shared-data
+        - name: dockerconfig
+          workspace: docker-config
     # taskC: deploy k8s
     - name: deploy-to-k8s
       taskRef:

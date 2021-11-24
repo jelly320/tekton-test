@@ -3,10 +3,10 @@ kind: Task
 metadata:
   name: build-and-push 
 spec:
-  resources:
-    inputs:
-        - name: source
-          type: git
+  workspaces:
+    - name: source
+    - name: dockerconfig
+      mountPath: /kaniko/.docker
   params:
     - name: image-url
       description: Url of image repository
@@ -14,7 +14,6 @@ spec:
       description: Tag to apply to the built image
     - name: image-appname
       description: Image appname to apply to the built image
-
   steps:
     - name: build-and-push-harbor
       # 使用kaniko代替docker
@@ -25,18 +24,19 @@ spec:
       args:
         - --dockerfile=Dockerfile
         - --destination=$(params.image-url)/$(params.image-appname):$(params.image-tag)
-        - --context=/workspace/source/
+        - --context=$(workspaces.source.path)
         - --skip-tls-verify
+      
       # 指定docker registy的认证信息
       # https://github.com/GoogleContainerTools/kaniko/issues/837
       # kubectl create secret generic regcred --from-file=.dockerconfigjson=/data/kaniko/.docker/config.json
-      volumeMounts:
-        - mountPath: /kaniko/.docker/
-          name: kaniko-secret
-  volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: regcred
-        items:
-          - key: .dockerconfigjson
-            path: config.json
+  #     volumeMounts:
+  #       - mountPath: /kaniko/.docker/
+  #         name: kaniko-secret
+  # volumes:
+  #   - name: kaniko-secret
+  #     secret:
+  #       secretName: regcred
+  #       items:
+  #         - key: .dockerconfigjson
+  #           path: config.json

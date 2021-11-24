@@ -9,6 +9,10 @@ spec:
   
   # 传入pipeline需要的参数
   params:
+    - name: git-revision
+      value: main
+    - name: git-url
+      value: http://gitlab4dev.5ypy.com/luyujiang/oreo-console-client.git  
     - name: image-url
       value: harbor.996a.com:8443/website/
     - name: image-tag
@@ -40,5 +44,8 @@ spec:
           resources:
             requests:
               storage: 1Gi
+    - name: docker-config
+      secret:
+        secretName: regcred
   # sa
   serviceAccountName: tekton-build
