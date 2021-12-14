@@ -14,7 +14,7 @@ tekton-test描述：
     |- run.yaml   //pipelinerun
 - trigger
     |- 
-
+```
 
 执行和创建
 1. 创建secret docker-registry
@@ -35,13 +35,6 @@ tekton-test描述：
 ```
 # kubectl apply -f run/run.yaml
 ```
-
-第二类
-第三类
-```
-
-
-
 
 
 
