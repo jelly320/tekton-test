@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: docker-configmap
+data:
+  config.json: |
+   {
+        "auths": {
+                "harbor.996a.com:8443": {
+                        "auth": "dmVsYTozUFBjSGRaQWo4QWJvTAo="
+                }
+        }
+   } 

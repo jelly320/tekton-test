@@ -15,6 +15,15 @@ spec:
     - name: image-appname
       description: Image appname to apply to the built image
   steps:
+    #- name: test-test
+    #  image: busybox 
+    #  command: ["top","-b"]
+    #  env:
+    #    - name: WORKSPACE_OUTPUT_PATH
+    #      value: $(workspaces.source.path)
+    #  volumeMounts:
+    #    - mountPath: /kaniko/.docker/
+    #      name: kaniko-secret
     - name: build-and-push-harbor
       # 使用kaniko代替docker
       image: gcr.io/kaniko-project/executor:latest
@@ -22,21 +31,20 @@ spec:
         - /kaniko/executor
       # 传递参数信息
       args:
+        - --context=/workspace/source/.
         - --dockerfile=Dockerfile
         - --destination=$(params.image-url)/$(params.image-appname):$(params.image-tag)
-        - --context=$(workspaces.source.path)
         - --skip-tls-verify
-      
       # 指定docker registy的认证信息
       # https://github.com/GoogleContainerTools/kaniko/issues/837
       # kubectl create secret generic regcred --from-file=.dockerconfigjson=/data/kaniko/.docker/config.json
-  #     volumeMounts:
-  #       - mountPath: /kaniko/.docker/
-  #         name: kaniko-secret
-  # volumes:
-  #   - name: kaniko-secret
-  #     secret:
-  #       secretName: regcred
-  #       items:
-  #         - key: .dockerconfigjson
-  #           path: config.json
+      #volumeMounts:
+      #  - mountPath: /kaniko/.docker/
+      #    name: kaniko-secret
+  #volumes:
+  #  - name: kaniko-secret
+  #    secret:
+  #      secretName: regcred
+  #      items:
+  #        - key: .dockerconfigjson
+  #          path: config.json

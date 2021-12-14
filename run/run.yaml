@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   name: fetch-build-deploy-run
+  namespace: default
 spec:
   # 需要执行的pipeline
   pipelineRef:
@@ -10,15 +11,15 @@ spec:
   # 传入pipeline需要的参数
   params:
     - name: git-revision
-      value: main
+      value: master
     - name: git-url
       value: http://gitlab4dev.5ypy.com/luyujiang/oreo-console-client.git  
     - name: image-url
-      value: harbor.996a.com:8443/website/
+      value: harbor.996a.com:8443/diff
     - name: image-tag
       value: latest
     - name: image-appname
-      value: console-client
+      value: luyujiang-console-client
     - name: pathToYamlFile
       value: deployment.yaml
 
@@ -46,6 +47,8 @@ spec:
               storage: 1Gi
     - name: docker-config
       secret:
-        secretName: regcred
+        secretName: docker-config 
+      #configmap:
+      #  name: docker-configmap
   # sa
   serviceAccountName: tekton-build

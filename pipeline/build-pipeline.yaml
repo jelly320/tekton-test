@@ -53,19 +53,21 @@ spec:
           workspace: shared-data
         - name: dockerconfig
           workspace: docker-config
-    # taskC: deploy k8s
-    - name: deploy-to-k8s
-      taskRef:
-        name: deploy-to-k8s
-      params:
-        - name: image-tag
-          value: $(params.image-tag)
-        - name: pathToYamlFile
-          value: $(params.pathToYamlFile)
-      resources:
-        inputs:
-          - name: source
-            resource: git-repo
       runAfter:
-        - build-and-push
+        - fetch-from-git 
+    # taskC: deploy k8s
+    #- name: deploy-to-k8s
+    #  taskRef:
+    #    name: deploy-to-k8s
+    #  params:
+    #    - name: image-tag
+    #      value: $(params.image-tag)
+    #    - name: pathToYamlFile
+    #      value: $(params.pathToYamlFile)
+    #  resources:
+    #    inputs:
+    #      - name: source
+    #        resource: git-repo
+    #  runAfter:
+    #    - build-and-push
     
