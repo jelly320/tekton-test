@@ -15,12 +15,33 @@ tekton-test描述：
 - trigger
     |- 
 
-创建顺序：
-第一类
+
+执行和创建
+1. 创建secret docker-registry
+```
+# kubectl create secret docker-registry dockerhub --docker-server=harbor.996a.com:8443 --docker-username=vela --docker-password=3xxxxL --dry-run=client -o json | jq -r '.data.".dockerconfigjson"' | base64 -d > /tmp/config.json && kubectl create secret generic docker-config --from-file=/tmp/config.json
+```
+
+3. apply
+```
+# kubectl apply -f resource/git-secret.yaml 
+# kubectl apply -f resource/serviceaccount.yaml
+...
+所有task
+所有pipeline
+```
+
+4. apply run
+```
+# kubectl apply -f run/run.yaml
+```
 
 第二类
 第三类
 ```
+
+
+
 
 
 
