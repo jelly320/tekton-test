@@ -85,3 +85,10 @@ cat /data/kaniko/.docker/config.json
   }
 kubectl create secret generic regcred --from-file=.dockerconfigjson=/data/kaniko/.docker/config.json
 ```
+
+
+
+我本地pv建来测试的比较小，如果因为上个pr失败导致未释放，可以操作一下如下：
+```
+# kubectl patch pv pv001 -p '{"spec":{"claimRef": null}}' 
+```
