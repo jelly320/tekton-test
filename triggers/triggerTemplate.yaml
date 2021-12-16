@@ -5,14 +5,14 @@ metadata:
 spec:
   params:
     - name: gitrevision
-      value: $(body.after)
+      description: The git revision
       default: master
     - name: namespace
-      value: default
+      description: The namespace to create the resources
     - name: gitrepositoryurl
-      value: $(body.project.git_http_url)
+      description: The git repository url
     - name: projectname
-      value: $(body.project.name)
+      description: The git project name
   
   # 以下resourcetemplates完全复用了之前的PipelineRun
   resourcetemplates:
