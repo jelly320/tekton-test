@@ -1,0 +1,53 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: trigger-test-triggertemplate
+spec:
+  params:
+    - name: gitrevision
+      value: $(body.after)
+      default: master
+    - name: namespace
+      value: default
+    - name: gitrepositoryurl
+      value: $(body.project.git_http_url)
+    - name: projectname
+      value: $(body.project.name)
+  
+  # 以下resourcetemplates完全复用了之前的PipelineRun
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      name: fetch-build-deploy-run-all
+      namespace: default
+    spec:
+      pipelineRef:
+        name: fetch-build-deploy
+      params:
+        - name: git-revision
+          value: $(tt.params.gitrevision)
+        - name: git-url
+          value: $(tt.params.gitrepositoryurl)
+        - name: image-url
+          value: harbor.996a.com:8443/diff
+        - name: image-tag
+          value: latest
+        - name: image-appname
+          value: $(tt.params.projectname)
+        - name: pathToYamlFile
+          value: deployment.yaml
+      workspaces:
+        - name: shared-data
+          volumeClaimTemplate:
+            metadata:
+              name: tekton-pvc
+            spec:
+              accessModes: ["ReadWriteMany"]
+              resources:
+                requests:
+                  storage: 1Gi
+        - name: docker-config
+          secret:
+            secretName: docker-config 
+      serviceAccountName: tekton-build

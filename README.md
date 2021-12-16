@@ -54,6 +54,10 @@ tekton安装
 
 # rpm -Uvh https://github.com/tektoncd/cli/releases/download/v0.21.0/tektoncd-cli-0.21.0_Linux-64bit.rpm
 ```
+trigger
+```
+# kubectl apply --filename https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
+```
 
 https://github.com/tektoncd/pipeline/blob/main/docs/tutorial.md
 
