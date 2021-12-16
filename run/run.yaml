@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: fetch-build-deploy-run
+  name: fetch-build-deploy-run-all
   namespace: default
 spec:
   # 需要执行的pipeline

@@ -3,17 +3,13 @@ kind: Task
 metadata:
   name: deploy-to-k8s
 spec:
-  resources:
-    inputs:
-        - name: source
-          type: git
   params:
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source
-      default: deployment.yaml
     - name: image-tag
       description: Tag to apply to the built image
-
+  workspaces:
+    - name: source
   steps:
     # 修改deployment.yml的imagetag
     - name: update-yaml
@@ -23,7 +19,7 @@ spec:
         - "-i"
         - "-e"
         - "s;imagetag;$(params.image-tag);g"
-        - "source/$(inputs.params.pathToYamlFile)"  
+        - "$(workspaces.source.path)/$(inputs.params.pathToYamlFile)"  
     
     - name: run-kubectl
       image: lachlanevenson/k8s-kubectl:latest
@@ -32,4 +28,4 @@ spec:
       args:
         - "apply"
         - "-f"
-        - "source/$(inputs.params.pathToYamlFile)"
+        - "$(workspaces.source.path)/$(inputs.params.pathToYamlFile)"
