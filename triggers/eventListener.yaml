@@ -1,9 +1,8 @@
 # 关联triggertemplate和triggerbinding
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1 
 kind: EventListener
 metadata:
   name: trigger-test-eventlistener
-  namespace: tekton-pipelines
 spec:
   serviceAccountName: tekton-triggers-sa
   triggers:
@@ -12,11 +11,11 @@ spec:
           - gitlab:
               # 配置gitlab的信息和Token的key
               secretRef:
-                secretName: git-user-pass
-                secretKey: gitlab-token
+                secretName: gitlab-token 
+                secretKey: secretToken 
               eventTypes:
                 - Push Hook
-    - bindings:
-        - name: trigger-test-triggerbinding
+      bindings:
+        - ref: trigger-test-triggerbinding
       template:
-        name: trigger-test-triggertemplate
+        ref: trigger-test-triggertemplate

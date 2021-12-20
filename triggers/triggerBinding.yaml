@@ -2,7 +2,6 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: trigger-test-triggerbinding
-  namespace: tekton-pipelines
 spec:
   # Gitlab Webhook可参考文档：https://docs.gitlab.com/ee/user/project/integrations/webhook_events.html#push-events
   params:

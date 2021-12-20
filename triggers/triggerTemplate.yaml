@@ -19,7 +19,7 @@ spec:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      name: fetch-build-deploy-run-all
+      name: fetch-build-deploy-run-trigger
       namespace: default
     spec:
       pipelineRef:
@@ -28,7 +28,8 @@ spec:
         - name: git-revision
           value: $(tt.params.gitrevision)
         - name: git-url
-          value: $(tt.params.gitrepositoryurl)
+          #value: $(tt.params.gitrepositoryurl)
+          value: http://192.168.203.129:30011/root/oreo-console-client.git 
         - name: image-url
           value: harbor.996a.com:8443/diff
         - name: image-tag
