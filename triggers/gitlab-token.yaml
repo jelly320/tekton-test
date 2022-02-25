@@ -1,9 +1,0 @@
-# 配置Trigger-EventListener需要的Secret资源
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gitlab-token
-type: Opaque
-stringData:
-  # 可以手动填写也可以自动生成Request的时候校验的
-  secretToken: "asd465qwv6zxc"

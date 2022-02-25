@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: fetch-build-deploy
+  name: build-and-push-pipeline
 spec:
   params:
     - name: git-url
@@ -56,17 +56,17 @@ spec:
       runAfter:
         - fetch-from-git 
     # taskC: deploy k8s
-    - name: deploy-to-k8s
-      taskRef:
-        name: deploy-to-k8s
-      params:
-        - name: image-tag
-          value: $(params.image-tag)
-        - name: pathToYamlFile
-          value: $(params.pathToYamlFile)
-      workspaces:
-        - name: source
-          workspace: shared-data
-      runAfter:
-        - build-and-push
+    # - name: deploy-to-k8s
+    #   taskRef:
+    #     name: deploy-to-k8s
+    #   params:
+    #     - name: image-tag
+    #       value: $(params.image-tag)
+    #     - name: pathToYamlFile
+    #       value: $(params.pathToYamlFile)
+    #   workspaces:
+    #     - name: source
+    #       workspace: shared-data
+    #   runAfter:
+    #     - build-and-push
     

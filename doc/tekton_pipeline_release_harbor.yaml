@@ -1789,17 +1789,17 @@ spec:
       serviceAccountName: tekton-pipelines-controller
       containers:
         - name: tekton-pipelines-controller
-          image: harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/controller
+          image: harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/controller
           args: [
             # These images are built on-demand by `ko resolve` and are replaced
             # by image references by digest.
-            "-kubeconfig-writer-image", "harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/kubeconfigwriter", "-git-image", "harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/git-init", "-entrypoint-image", "harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/entrypoint", "-nop-image", "harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/nop", "-imagedigest-exporter-image", "harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/imagedigestexporter", "-pr-image", "harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/pullrequest-init",
+            "-kubeconfig-writer-image", "harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/kubeconfigwriter", "-git-image", "harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/git-init", "-entrypoint-image", "harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/entrypoint", "-nop-image", "harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/nop", "-imagedigest-exporter-image", "harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/imagedigestexporter", "-pr-image", "harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/pullrequest-init",
             # This is gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim
-            "-gsutil-image", "harbor.996a.com:8443/test_sync/cloudsdktool/cloud-sdk",
+            "-gsutil-image", "harbor.domain.com:8443/test_sync/cloudsdktool/cloud-sdk",
             # The shell image must be root in order to create directories and copy files to PVCs.
             # gcr.io/distroless/base:debug as of October 21, 2021
             # image shall not contains tag, so it will be supported on a runtime like cri-o
-            "-shell-image", "harbor.996a.com:8443/test_sync/distroless/base",
+            "-shell-image", "harbor.domain.com:8443/test_sync/distroless/base",
             # for script mode to work with windows we need a powershell image
             # pinning to nanoserver tag as of July 15 2021
             "-shell-image-win", "mcr.microsoft.com/powershell:nanoserver@sha256:b6d5ff841b78bdf2dfed7550000fd4f3437385b8fa686ec0f010be24777654d6"]
@@ -2041,7 +2041,7 @@ spec:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: harbor.996a.com:8443/test_sync/tektoncd/pipeline/cmd/webhook
+          image: harbor.domain.com:8443/test_sync/tektoncd/pipeline/cmd/webhook
           # Resource request required for autoscaler to take any action for a metric
           resources:
             requests:

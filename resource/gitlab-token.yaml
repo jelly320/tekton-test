@@ -1,0 +1,9 @@
+# 配置Trigger-EventListener需要的Secret资源
+# 此token将在gitlab配置webhook时使用，自定义即可
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitlab-token
+type: Opaque
+stringData:
+  secretToken: "xxxxxx"

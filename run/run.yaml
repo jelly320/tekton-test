@@ -6,20 +6,20 @@ metadata:
 spec:
   # 需要执行的pipeline
   pipelineRef:
-    name: fetch-build-deploy
+    name: build-and-push-pipeline
   
   # 传入pipeline需要的参数
   params:
     - name: git-revision
       value: master
     - name: git-url
-      value: http://gitlab4dev.5ypy.com/luyujiang/oreo-console-client.git  
+      value: http://gitlab4dev.domain.com/dapiaoliang/oreo-console-client.git  
     - name: image-url
-      value: harbor.996a.com:8443/diff
+      value: harbor.domain.com:8443/diff
     - name: image-tag
       value: latest
     - name: image-appname
-      value: luyujiang-console-client
+      value: dapiaoliang-console-client
     - name: pathToYamlFile
       value: deployment.yaml
 

@@ -364,7 +364,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
           #image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard:v0.22.0@sha256:8285c9e07ccbb008425c34f5c3b5a684fb4ab36325a3e1d270e4521389248e51
-          image: harbor.996a.com:8443/test_sync/tektoncd/dashboard/cmd/dashboard:v0.22.0 
+          image: harbor.domain.com:8443/test_sync/tektoncd/dashboard/cmd/dashboard:v0.22.0 
           livenessProbe:
             httpGet:
               path: /health

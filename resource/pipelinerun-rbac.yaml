@@ -1,0 +1,22 @@
+# 配置pipelinerun所需的ServiceAccount: tekton-build-sa
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-build-sa
+secrets:
+  - name: gitlab-user-pass
+
+# 若pipelinerun不需要执行deploy-to-k8s，以下应当可以不执行
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRoleBinding
+# metadata:
+#   name: pipeline-admin-binding
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: admin # user cluster role admin
+# subjects:
+# - kind: ServiceAccount
+#   name: tekton-build-sa
+#   namespace: default

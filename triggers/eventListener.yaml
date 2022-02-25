@@ -2,8 +2,20 @@
 apiVersion: triggers.tekton.dev/v1alpha1 
 kind: EventListener
 metadata:
-  name: trigger-test-eventlistener
+  name: trigger-release-eventlistener
+  #annotations:
+     #service.beta.kubernetes.io/alibaba-cloud-loadbalancer-force-override-listeners: "true"
+     #service.beta.kubernetes.io/alibaba-cloud-loadbalancer-id: lb-xxxxxxxxxxxxx
+     #service.beta.kubernetes.io/alibaba-cloud-loadbalancer-protocol-port: "https:443"
 spec:
+  resources:
+    kubernetesResource:
+      serviceType: LoadBalancer
+      spec:
+         template:
+            metadata:
+              annotations:
+                 service.beta.kubernetes.io/alibaba-cloud-loadbalancer-id: lb-xxxxxxxxxxxxx
   serviceAccountName: tekton-triggers-sa
   triggers:
     - name: trigger
@@ -16,6 +28,6 @@ spec:
               eventTypes:
                 - Push Hook
       bindings:
-        - ref: trigger-test-triggerbinding
+        - ref: trigger-release-triggerbinding
       template:
-        ref: trigger-test-triggertemplate
+        ref: trigger-release-triggertemplate
