@@ -1,6 +1,7 @@
 # Introduction
 
 此工程为工作上调研Tekton时的记录。
+
 此工程包含的yaml能完整的实现`gitlab提交->触发trigger->执行pipelinerun(构建镜像->推送harbor->deploy k8s)`一个tekton的经典应用场景
 
 ## tekton-test工程目录结构
